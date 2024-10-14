@@ -1,3 +1,5 @@
+-- type mysql -u root at the bash prompt to start the database.
+
 -- see all the databases on your server
 
 show databases;
@@ -65,3 +67,28 @@ DELETE FROM parents WHERE parent_id = 1;
 
 --DROP: delete an table
 DROP TABLE parents; --won't work as parent_id foreign key still referencing.
+
+--Create the payments table
+CREATE TABLE payments (
+    payment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    date_paid DATETIME NOT NULL,
+    parent_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (parent_id) REFERENCES parents(parent_id),
+    student_id MEDIUMINT UNSIGNED NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+) engine = innodb;
+
+--alter the payments table to add in the amount
+--(deliberately forget to set to as NOT NULL)
+ALTER TABLE payments ADD COLUMN amount DECIMAL(10,2);
+
+--change the amount column that is not null
+--modifying a column is kike a PUT in RESTFul API
+
+ALTER TABLE payments MODIFY COLUMN amount DECIMAL(10, 2);
+
+--add a dummy column demonstrate dropping
+ALTER TABLE payments ADD COLUMN test VARCHAR(100);
+
+--drop a column
+ALTER TABLE payments DROP COLUMN test;
